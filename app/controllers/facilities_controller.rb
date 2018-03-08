@@ -40,7 +40,6 @@ class FacilitiesController < CalsBaseController
     @facilities = facility_helper.search es_query_json
     @facilities_response = {}
     @facilities_response['facilities'] = @facilities['hits']['hits'].collect { |facility| facility['_source']}
-    @facilities_response['facilities'].sort_by! {|facility_name| facility_name['name']}
     @facilities_response['total'] = @facilities['hits']['total']
     #store_facility_response_in_session
     json_response @facilities_response
