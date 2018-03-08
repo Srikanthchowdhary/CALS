@@ -41,7 +41,7 @@ class Elastic::QueryBuilder
   #
   def self.match_boolean(query_array, page_params)
 
-    if page_params['sort_params'].empty? && page_params['order_params'].empty?
+    if page_params['sort_params'].nil? && page_params['order_params'].nil?
       final_sort_query = []
     else
       final_sort_query = sort_query(page_params['sort_params'], page_params['order_params'])
