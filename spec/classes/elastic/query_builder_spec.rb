@@ -36,13 +36,20 @@ describe FacilitiesController do
           }
         },
         from: '0',
-        size: '5' 
+        size: '5' ,
+        sort: [
+          {
+            '_score' =>
+            {
+              order: 'asc'
+            }
+          }
+        ]
       }
 
       input = [{"fac_co_nbr"=>"28", "fac_name"=>"home"}]
-      from = "0"
-      size = "5"
-      output = Elastic::QueryBuilder.match_boolean(input, from, size)
+      page_param = {"size_params"=>"5", "from_params"=>"0", "sort_params"=>"_score", "order_params"=>"asc"}
+      output = Elastic::QueryBuilder.match_boolean(input, page_param)
       expect(output).to eq(expected_output)
     end
 

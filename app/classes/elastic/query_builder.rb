@@ -47,7 +47,6 @@ class Elastic::QueryBuilder
       final_sort_query = sort_query(page_params['sort_params'], page_params['order_params'])
     end
 
-
     # prepare array of match queries.
     combined_query_array = []
 
