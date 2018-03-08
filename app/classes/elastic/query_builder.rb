@@ -19,6 +19,17 @@ class Elastic::QueryBuilder
     }
   end
 
+  def self.sort_query(sort_params, order_params)
+    return[
+      {
+        sort_params =>
+        {
+          order: order_params
+        }
+      }
+    ]
+  end
+
   # query_array : array of hash - attributes and values to query
   # all keys of a hash will be combined with   AND
   #  each array item will be combined with  OR
@@ -30,14 +41,26 @@ class Elastic::QueryBuilder
   #
   def self.match_boolean(query_array, from_params, size_params)
 
+    sort_params = query_array.map {|param| param['sort']}.first
+    order_params = query_array.map {|param| param['order']}.first
+
+    if sort_params && order_params
+      final_sort_query = sort_query(sort_params, order_params)
+    end
+
+    query_array_without_sort = [query_array.first.except('sort')]
+    query_array_without_sort_order = [query_array_without_sort.first.except('order')]
+
+
     # prepare array of match queries.
     combined_query_array = []
 
     # loop through each array item to create piece of query
-    query_array.each do |itm|
+    query_array_without_sort_order.each do |itm|
       # combined_query_array << address_query(itm.delete('addresses.address.street_address')) if itm['addresses.address.street_address'].present?
       combined_query_array << match_and(itm)
     end
+    byebug
     # wrap array in a bool OR query
     return {
       query: {
@@ -45,6 +68,7 @@ class Elastic::QueryBuilder
           should: combined_query_array
         }
       },
+      sort: final_sort_query,
       from: from_params,
       size: size_params
     }

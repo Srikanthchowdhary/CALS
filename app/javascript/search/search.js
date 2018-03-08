@@ -44,7 +44,9 @@ export default class Search extends React.Component {
       'type.value': query[1],
       id: query[2],
       name: query[3],
-      'addresses.address.street_address': query.slice(4, (query.length))
+      'addresses.address.street_address': query.slice(4, (query.length)),
+      'sort': '_score',
+      'order': 'asc'
     }
 
     // call http request function with arguments
