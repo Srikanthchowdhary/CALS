@@ -85,8 +85,8 @@ def getNewTagNumber(baseTagNumber, sprints) {
     int newTagNumber = baseTagNumber
     sprints.times {
         newTagNumber += 1
-        if ((newTagNumber % 10) >= 7) {
-            newTagNumber += 4
+        if ((newTagNumber % 10) >= 5) {
+            newTagNumber += 6
         }
     }
     return newTagNumber
