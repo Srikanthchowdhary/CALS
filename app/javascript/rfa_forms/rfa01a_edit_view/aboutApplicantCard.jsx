@@ -101,7 +101,7 @@ export default class AboutApplicant extends React.PureComponent {
                 selectClassName='reusable-select'
                 value={getDictionaryId(aboutApplicantFields.driver_license_state)}
                 optionList={this.props.stateTypes}
-                label={aboutApplicantFields.driver_license_number ? 'Driver License State (Required)' : 'Driver License State'}
+                label={aboutApplicantFields.driver_license_number ? 'Driver License State (required)' : 'Driver License State'}
                 onChange={(event) => this.props.setParentState('driver_license_state', dictionaryNilSelect(event.target.options))}
                 errors={fieldErrorsAsImmutableSet(this.props.errors.driver_license_state)}
                 onBlur={(event) => this.validateDLcombo(this.driversLicenseStateId, event.target.value, this.driversLicenseNumberId, 'driver_license_number')} />

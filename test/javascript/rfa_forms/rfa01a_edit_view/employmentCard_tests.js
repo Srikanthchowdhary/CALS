@@ -1,5 +1,5 @@
 import React from 'react'
-import Immutable from 'immutable'
+import Immutable, {isImmutable} from 'immutable'
 import Employment from 'rfa_forms/rfa01a_edit_view/employmentCard.jsx'
 import ReactDOM from 'react-dom'
 import {shallow, mount} from 'enzyme'
@@ -30,13 +30,14 @@ describe('Employment Card', function () {
     }
   })
   let employmentCardComp, onEmploymentChange, setCardState
-  const employmentCard = new ShallowRenderer()
-  const cardRendered = employmentCard.render(<Employment {...props} />)
+  // const employmentCard = new ShallowRenderer()
+  // const cardRendered = employmentCard.render(<Employment {...props} />)
 
-  it('verify Resident Address fields', function () {
-    let employmentClassName = cardRendered
-    expect(employmentClassName.props.className).toBe('card-body')
-  })
+  // it('verify Resident Address fields', function () {
+  //   let employmentClassName = cardRendered
+  //   expect(employmentClassName.props.className).toBe('card-body')
+  // })
+
   beforeEach(() => {
     onEmploymentChange = jasmine.createSpy('onEmploymentChange')
     setCardState = jasmine.createSpy('setParentState')
@@ -47,6 +48,26 @@ describe('Employment Card', function () {
       employment={applicantFields}
       setParentState={setCardState} />)
   })
+  it('verify employment address change object type', () => {
+    let employmentFields = applicantFields
+    const newAddress = {
+      street_address: '3000 West Elk',
+      zip: '95833',
+      city: '',
+      state: {
+        id: '6',
+        value: 'California'
+      }
+    }
+
+    // method call using JS object
+    employmentCardComp.instance().onEmploymentChange('physical_address', newAddress)
+
+    // parent called with full immutable
+    employmentFields = employmentFields.set('physical_address', Immutable.fromJS(newAddress))
+    expect(setCardState).toHaveBeenCalledWith('employment', employmentFields)
+  })
+
   it('verify Employment Name Change', () => {
     let employmentNameField = employmentCardComp.find('#employer_name')
     spyOn(employmentCardComp.instance(), 'onEmploymentChange').and.callThrough()
@@ -84,6 +105,11 @@ describe('Employment Card', function () {
         salaryTypes={salaryTypes.items}
         employment={applicantFields}
         setParentState={setCardState} />)
+    })
+    it('verify propTypes has physical Address as an immutable object', () => {
+      let physAddress = employmentCardComp.instance().props.employment.get('physical_address')
+      const isAMap = Immutable.Map.isMap(physAddress)
+      expect(isAMap).toBe(true)
     })
     it('verify Physical Street Address Change', () => {
       let streetAddressField = employmentCardComp.find('#Residentialstreet_address').hostNodes()

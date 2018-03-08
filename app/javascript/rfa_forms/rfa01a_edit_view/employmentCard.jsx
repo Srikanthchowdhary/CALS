@@ -17,7 +17,7 @@ export default class Employment extends React.PureComponent {
   }
 
   onEmploymentChange (key, value) {
-    const newData = this.props.employment.set(key, value)
+    const newData = this.props.employment.set(key, Immutable.fromJS(value))
     this.props.setParentState('employment', newData)
   }
   onPhysicalAddressChange (key, value) {
