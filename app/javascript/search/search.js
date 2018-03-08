@@ -44,13 +44,11 @@ export default class Search extends React.Component {
       'type.value': query[1],
       id: query[2],
       name: query[3],
-      'addresses.address.street_address': query.slice(4, (query.length)),
-      'sort': '_score',
-      'order': 'asc'
+      'addresses.address.street_address': query.slice(4, (query.length))
     }
 
     // call http request function with arguments
-    let url = '/facilities/search' + '?from=' + getFromValue + '&size=' + getSizeValue + '&pageNumber=' + this.state.pageNumber
+    let url = '/facilities/search' + '?from=' + getFromValue + '&size=' + getSizeValue + '&pageNumber=' + this.state.pageNumber + '&sort=' + '' + '&order=' + ''
     fetchRequest(url, 'POST', params).then((response) => {
       return response.json()
     }).then((data) => {
